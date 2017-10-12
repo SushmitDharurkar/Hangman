@@ -19,14 +19,14 @@
 
 <p *ngIf = "wonGame">{{wonGameMsg}}
 
-<p> <button *ngIf = "endGame || wonGame" mat-raised-button color="warn"
+<p> <button *ngIf = "endGame || wonGame"
     md-button (click) = "playAgain()">Play Again</button>
 </div>
 
 <div style="text-align:center">
   <form #thisform = "ngForm">
     <md-form-field>
-      <input size = "1" [(ngModel)]="letter" name="letter" maxlength="1">
+      <input size = "2" [(ngModel)]="letter" name="letter" maxlength="1">
       <button md-button (click) = "onSubmit()">Submit</button>
     </md-form-field>
   </form>

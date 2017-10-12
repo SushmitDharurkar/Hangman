@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">{{endGameMsg}}\n\n<p *ngIf = \"wonGame\">{{wonGameMsg}}\n\n<p> <button *ngIf = \"endGame || wonGame\" mat-raised-button color=\"warn\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"1\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">{{endGameMsg}}\n\n<p *ngIf = \"wonGame\">{{wonGameMsg}}\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
 
 /***/ }),
 
@@ -44,9 +44,7 @@ module.exports = "<!--The content below is only a placeholder and can be replace
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_underscore__ = __webpack_require__("../../../../underscore/underscore.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_underscore___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_underscore__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,20 +56,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var AppComponent = (function () {
     function AppComponent(http) {
         var _this = this;
         this.http = http;
         this.title = 'Hangman';
-        this.api = 'http://localhost:3000/api';
-        http.get(this.api + '/word')
+        http.get('/api/word')
             .subscribe(function (response) {
             _this.response = response;
-            _this.len = _this.response.len;
-            _this.dashes = Array(_this.len).fill('_');
-            _this.output = Array(_this.len);
-            _this.missingSlots = true;
+            _this.dashes = _this.response.dashes;
             _this.guess = true;
             _this.endGame = false;
             _this.wonGame = false;
@@ -84,9 +77,9 @@ var AppComponent = (function () {
     AppComponent.prototype.onSubmit = function () {
         var _this = this;
         this.guess = true;
-        var params = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpParams */]();
+        var params = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]();
         params = params.append('letter', this.letter);
-        this.http.get(this.api + '/guessedResponse', { params: params })
+        this.http.get('/api/guessedResponse', { params: params })
             .subscribe(function (response) {
             _this.guessedResponse = response;
             _this.displayOutput();
@@ -96,56 +89,22 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.displayOutput = function () {
         if (this.guessedResponse.guess) {
-            __WEBPACK_IMPORTED_MODULE_1_underscore__["forEach"](this.guessedResponse.indexes, function (index) {
-                this.output[index] = this.letter;
-                this.dashes[index] = this.letter;
-                //this.dashesindex * 2 = this.letter;
-            }, this);
-            for (var i = 0; i < this.output.length; i++) {
-                if (this.output[i] === undefined) {
-                    this.missingSlots = true;
-                    break;
-                }
-                else if (i == this.output.length - 1 && this.output[i]) {
-                    this.missingSlots = false;
-                }
-            }
-            if (!this.missingSlots) {
-                console.log("You won!");
+            this.dashes = this.guessedResponse.dashes;
+            this.wonGame = this.guessedResponse.wonGame;
+            if (this.wonGame) {
                 this.wonGame = true;
                 this.wonGameMsg = "You won!";
             }
-            //console.log(this.output);
-            console.log(this.dashes);
         }
         else {
             this.displayWrongGuess();
         }
         this.letter = "";
     };
-    AppComponent.prototype.playAgain = function () {
-        var _this = this;
-        this.output = [];
-        this.http.get(this.api + '/word')
-            .subscribe(function (response) {
-            _this.response = response;
-            _this.len = _this.response.len;
-            _this.output = Array(_this.len);
-            _this.dashes = Array(_this.len).fill('_');
-            _this.missingSlots = true;
-            _this.guess = true;
-            _this.endGame = false;
-            _this.wonGame = false;
-            _this.img_src = "../../assets/Images/hangman_0.jpg";
-            _this.incorrectGuessesList = [];
-            _this.incorrectGuessesCount = 0;
-            _this.incorrectGuessesCountMsg = "";
-        }, function (err) { return console.log('Error occurred in first response' + err); });
-    };
     AppComponent.prototype.displayWrongGuess = function () {
         this.guess = false;
         this.incorrectGuessesList.push(this.letter);
-        console.log(this.incorrectGuessesList);
+        //console.log(this.incorrectGuessesList);
         this.incorrectGuessMsg = "Your guessed letter: " + this.letter + " was incorrect.";
         this.incorrectGuessesCount = this.guessedResponse.incorrectGuesses;
         this.img_src = "../../assets/Images/hangman_" + this.incorrectGuessesCount + ".jpg";
@@ -155,6 +114,22 @@ var AppComponent = (function () {
             this.endGameMsg = "You lost!";
         }
     };
+    AppComponent.prototype.playAgain = function () {
+        var _this = this;
+        this.dashes = [];
+        this.http.get('/api/word')
+            .subscribe(function (response) {
+            _this.response = response;
+            _this.dashes = _this.response.dashes;
+            _this.guess = true;
+            _this.endGame = false;
+            _this.wonGame = false;
+            _this.img_src = "../../assets/Images/hangman_0.jpg";
+            _this.incorrectGuessesList = [];
+            _this.incorrectGuessesCount = 0;
+            _this.incorrectGuessesCountMsg = "";
+        }, function (err) { return console.log('Error occurred in first response' + err); });
+    };
     return AppComponent;
 }());
 AppComponent = __decorate([
@@ -163,7 +138,7 @@ AppComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/app.component.html"),
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object])
 ], AppComponent);
 
 var _a;
