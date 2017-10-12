@@ -10,8 +10,8 @@ var current_word_len;
 var missingSlots;
 var current_word;
 var dashes;
-//var wins = 0;
-//var loses = 0;
+var wins = 0;
+var loses = 0;
 
 router.get('/word', (req, res) => {
   console.log("server was called");
@@ -25,7 +25,9 @@ router.get('/word', (req, res) => {
   incorrectGuesses = 0;
 
   res.json({
-    dashes : dashes
+    dashes : dashes,
+    loses : loses,
+    wins : wins
   });
 })
 
@@ -63,13 +65,14 @@ router.get('/guessedResponse', (req, res) => {
   if(!missingSlots){
     console.log("You won!");
     wonGame = true;
+    wins++;
   }
 
   if (!guess){
     incorrectGuesses++;
     if (incorrectGuesses >= 10){
       endGame = true;
-      //loses++;
+      loses++;
     }
   }
   res.json({
@@ -77,7 +80,9 @@ router.get('/guessedResponse', (req, res) => {
     dashes : dashes,
     incorrectGuesses : incorrectGuesses,
     endGame : endGame,
-    wonGame : wonGame
+    wonGame : wonGame,
+    loses : loses,
+    wins : wins
   });
 })
 

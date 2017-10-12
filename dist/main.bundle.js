@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">{{endGameMsg}}\n\n<p *ngIf = \"wonGame\">{{wonGameMsg}}\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">You lost!!!\n\n<p *ngIf = \"wonGame\">You won!!!\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"wins || loses\">Wins: {{wins}}\n  <p *ngIf = \"loses || wins\">Loses: {{loses}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
 
 /***/ }),
 
@@ -66,6 +66,8 @@ var AppComponent = (function () {
             _this.response = response;
             _this.dashes = _this.response.dashes;
             _this.guess = true;
+            _this.wins = 0;
+            _this.loses = 0;
             _this.endGame = false;
             _this.wonGame = false;
             _this.img_src = "../../assets/Images/hangman_0.jpg";
@@ -93,7 +95,8 @@ var AppComponent = (function () {
             this.wonGame = this.guessedResponse.wonGame;
             if (this.wonGame) {
                 this.wonGame = true;
-                this.wonGameMsg = "You won!";
+                this.wins = this.guessedResponse.wins;
+                this.loses = this.guessedResponse.loses;
             }
         }
         else {
@@ -111,7 +114,8 @@ var AppComponent = (function () {
         this.incorrectGuessesCountMsg = "Incorrect Guesses: " + this.incorrectGuessesCount;
         if (this.guessedResponse.endGame) {
             this.endGame = true;
-            this.endGameMsg = "You lost!";
+            this.wins = this.guessedResponse.wins;
+            this.loses = this.guessedResponse.loses;
         }
     };
     AppComponent.prototype.playAgain = function () {
@@ -128,6 +132,8 @@ var AppComponent = (function () {
             _this.incorrectGuessesList = [];
             _this.incorrectGuessesCount = 0;
             _this.incorrectGuessesCountMsg = "";
+            _this.wins = _this.response.wins;
+            _this.loses = _this.response.loses;
         }, function (err) { return console.log('Error occurred in first response' + err); });
     };
     return AppComponent;

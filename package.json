@@ -13,9 +13,9 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cli": "1.3.2",
     "@angular/animations": "^4.2.4",
     "@angular/cdk": "^2.0.0-beta.10",
+    "@angular/cli": "1.3.2",
     "@angular/common": "^4.2.4",
     "@angular/compiler": "^4.2.4",
     "@angular/core": "^4.2.4",
@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
     "core-js": "^2.4.1",
+    "memjs": "^1.0.0-rc.1",
     "random-word": "^2.0.0",
     "rxjs": "^5.4.2",
     "underscore": "^1.8.3",

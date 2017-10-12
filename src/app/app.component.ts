@@ -10,18 +10,18 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 })
 export class AppComponent {
     title = 'Hangman';
-    letter: string;
+    letter;
     dashes;
     guess;
     endGame;
     wonGame;
+    wins;
+    loses;
     incorrectGuessesList;
     incorrectGuessesCount;
     incorrectGuessesCountMsg;
     incorrectGuessMsg;
     img_src;
-    endGameMsg;
-    wonGameMsg;
     response;
     guessedResponse;
 
@@ -32,6 +32,8 @@ export class AppComponent {
                   this.response = response;
                   this.dashes = this.response.dashes;
                   this.guess = true;
+                  this.wins = 0;
+                  this.loses = 0;
                   this.endGame = false;
                   this.wonGame = false;
                   this.img_src = "../../assets/Images/hangman_0.jpg";
@@ -66,7 +68,8 @@ export class AppComponent {
             this.wonGame = this.guessedResponse.wonGame;
             if(this.wonGame){
               this.wonGame = true;
-              this.wonGameMsg = "You won!";
+              this.wins = this.guessedResponse.wins;
+              this.loses = this.guessedResponse.loses;
             }
         }
         else {
@@ -85,7 +88,8 @@ export class AppComponent {
       this.incorrectGuessesCountMsg = "Incorrect Guesses: " + this.incorrectGuessesCount;
       if (this.guessedResponse.endGame){
         this.endGame = true;
-        this.endGameMsg = "You lost!";
+        this.wins = this.guessedResponse.wins;
+        this.loses = this.guessedResponse.loses;
       }
     }
 
@@ -103,6 +107,8 @@ export class AppComponent {
                   this.incorrectGuessesList = [];
                   this.incorrectGuessesCount = 0;
                   this.incorrectGuessesCountMsg = "";
+                  this.wins = this.response.wins;
+                  this.loses = this.response.loses;
                 },
                 (err) => console.log('Error occurred in first response' + err),
             );

@@ -15,9 +15,9 @@
 
 <div style="text-align:center">
 
-<p *ngIf = "endGame">{{endGameMsg}}
+<p *ngIf = "endGame">You lost!!!
 
-<p *ngIf = "wonGame">{{wonGameMsg}}
+<p *ngIf = "wonGame">You won!!!
 
 <p> <button *ngIf = "endGame || wonGame"
     md-button (click) = "playAgain()">Play Again</button>
@@ -37,6 +37,9 @@
   <p *ngIf = "!guess">Incorrect Guesses: {{incorrectGuessesList}}
 
   <p *ngIf = "guess">Incorrect Guesses: {{incorrectGuessesList}}
+
+  <p *ngIf = "wins || loses">Wins: {{wins}}
+  <p *ngIf = "loses || wins">Loses: {{loses}}
   <!-- <div class = "dashes">
     <p class="space" *ngFor = "let guessedChar of incorrectGuessesList">{{guessedChar}}
   </div>-->
