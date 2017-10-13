@@ -1,4 +1,4 @@
-##Installation Steps:
+## Installation Steps:
 
 ### For installing node.js:
 
@@ -6,16 +6,16 @@ sudo apt-get install nodejs
 
 sudo apt-get install npm
 
-###For installing Angular:
+### For installing Angular:
 
 npm install -g @angular/cli
 
-###For installing Memcached:
+### For installing Memcached:
 
 sudo apt-get install memcached
 
 
-##Running Instructions:
+## Running Instructions:
 
 1. Extract zip file and cd to directory.
 
