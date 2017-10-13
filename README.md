@@ -21,13 +21,13 @@ sudo apt-get install memcached
 
 2. Run npm install for resolving dependencies.
 
-3. Open terminal. Run "memcached" for starting memcached. (Default port: 11211)
+3. Open a terminal in this directory and run **"memcached"** for starting memcached. (Default port: 11211)
 
-4. Open another terminal. Run "ng build --w"
+4. Open another terminal in the same directory and run **"ng build --w"**
 
-5. Open a third terminal. Run "node server.js"
+5. Open a third terminal here again and run **"node server.js"**
 
-6. Go to browser & check "localhost:8080
+6. Go to browser & check **"localhost:8080**
 
 7. Enjoy the game! 
 
@@ -41,4 +41,4 @@ sudo apt-get install memcached
 * Most of the business logic is on the server side and the client side is only given the task of rendering based on certain conditions.
 * I have used Angular4 components for making REST calls to the backend and rendering HTML.
 * src/app contains the angular .ts, .html and .css files.
- 
+* I have used a npm "random-word" library for getting the words.
