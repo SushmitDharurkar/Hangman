@@ -24,6 +24,7 @@ export class AppComponent {
     incorrectGuessesCountMsg;
     incorrectGuessMsg;
     img_src;
+    current_word;
     response;
     guessedResponse;
 
@@ -104,6 +105,7 @@ export class AppComponent {
         this.endGame = true;
         this.wins = this.guessedResponse.wins;
         this.loses = this.guessedResponse.loses;
+        this.current_word = this.guessedResponse.current_word;
       }
     }
 

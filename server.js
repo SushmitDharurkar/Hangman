@@ -124,15 +124,29 @@ app.get('/guessedResponse', (req, res) => {
     }
   }
 
-  res.json({
-    guess : guess,
-    dashes : dashes,
-    incorrectGuesses : incorrectGuesses,
-    endGame : endGame,
-    wonGame : wonGame,
-    loses : loses,
-    wins : wins
-  });
+  if (!endGame){
+    res.json({
+      guess : guess,
+      dashes : dashes,
+      incorrectGuesses : incorrectGuesses,
+      endGame : endGame,
+      wonGame : wonGame,
+      loses : loses,
+      wins : wins
+    });
+  }
+  else{
+    res.json({
+      guess : guess,
+      dashes : dashes,
+      incorrectGuesses : incorrectGuesses,
+      endGame : endGame,
+      wonGame : wonGame,
+      loses : loses,
+      wins : wins,
+      current_word : current_word
+    });
+  }
 })
 
 // Send all other requests to the Angular app
