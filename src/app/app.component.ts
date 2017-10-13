@@ -17,6 +17,8 @@ export class AppComponent {
     wonGame;
     wins;
     loses;
+    guessesList;
+    alreadyGuessed
     incorrectGuessesList;
     incorrectGuessesCount;
     incorrectGuessesCountMsg;
@@ -26,18 +28,19 @@ export class AppComponent {
     guessedResponse;
 
     constructor(private http: HttpClient) {
-        http.get('/api/word')
+        http.get('/word')
             .subscribe(
                 (response) => {
                   this.response = response;
                   this.dashes = this.response.dashes;
                   this.guess = true;
-                  this.wins = 0;
-                  this.loses = 0;
+                  this.wins = this.response.wins;
+                  this.loses = this.response.loses;
                   this.endGame = false;
                   this.wonGame = false;
                   this.img_src = "../../assets/Images/hangman_0.jpg";
                   this.incorrectGuessesList = [];
+                  this.guessesList = [];
                   },
                 (err) => {
                   console.log('Error occurred in first response' + err);
@@ -47,19 +50,30 @@ export class AppComponent {
 
     onSubmit() {
         this.guess = true;
-        let params = new HttpParams();
-        params = params.append('letter', this.letter);
-        this.http.get('/api/guessedResponse', {params: params})
-            .subscribe(
-              (response) =>
-                    {
-                      this.guessedResponse = response;
-                      this.displayOutput();
-                    },
-                 (err) => {
-                   console.log('Error occurred in guessedResponse response' + err);
-                 }
-            );
+        this.alreadyGuessed = false;
+        for (var i =0 ; i< this.guessesList.length; i++){
+          if (this.guessesList[i] == this.letter){
+            this.alreadyGuessed = true;
+            break;
+          }
+        }
+
+        if (!this.alreadyGuessed){
+          let params = new HttpParams();
+          params = params.append('letter', this.letter);
+          this.http.get('/guessedResponse', {params: params})
+              .subscribe(
+                (response) =>
+                      {
+                        this.guessedResponse = response;
+                        this.displayOutput();
+                      },
+                   (err) => {
+                     console.log('Error occurred in guessedResponse response' + err);
+                   }
+              );
+          this.guessesList.push(this.letter);
+        }
     }
 
     displayOutput() {
@@ -95,7 +109,7 @@ export class AppComponent {
 
     playAgain() {
         this.dashes = [];
-        this.http.get('/api/playAgain')
+        this.http.get('/word')
             .subscribe(
                 (response) => {
                   this.response = response;
@@ -105,6 +119,7 @@ export class AppComponent {
                   this.wonGame = false;
                   this.img_src = "../../assets/Images/hangman_0.jpg";
                   this.incorrectGuessesList = [];
+                  this.guessesList = [];
                   this.incorrectGuessesCount = 0;
                   this.incorrectGuessesCountMsg = "";
                   this.wins = this.response.wins;

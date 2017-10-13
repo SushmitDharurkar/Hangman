@@ -1,9 +1,22 @@
 const express = require('express');
 const randomWord = require('random-word');
 const router = express.Router();
-const memjs = require('memjs');
+const session = require('express-session')
+const MemcachedStore = require('connect-memcached')(session);
+//const memjs = require('memjs');
 
-var mc = memjs.Client.create();
+//var mc = memjs.Client.create();
+
+//Sessions and Memcache
+router.use(session({
+      secret  : 'this-is-a-secret',
+      resave: false,
+      saveUninitialized: true,
+      store   : new MemcachedStore({
+        hosts: ['127.0.0.1:11211'],
+        secret: 'another-secret-here'
+    })
+}));
 
 router.get('/word', (req, res) => {
   console.log("server was called");
@@ -12,12 +25,16 @@ router.get('/word', (req, res) => {
   current_word = current_word.toLowerCase();
   var dashes = Array(current_word.length).fill('_');
 
-  mc.set("current_word", current_word, {expires : 600}, function (err, val){  });
+  req.session.dashes = dashes;
+  req.session.missingSlots = true;
+  req.session.incorrectGuesses = 0;
+
+  /*mc.set("current_word", current_word, {expires : 600}, function (err, val){  });
   mc.set("dashes", dashes.toString(), {expires : 600}, function (err, val){  });
   mc.set("missingSlots", "true", {expires : 600}, function (err, val){  });
   mc.set("incorrectGuesses", "0", {expires : 600}, function (err, val){});
   mc.set("wins", "0", {expires : 600}, function (err, val){});
-  mc.set("loses", "0", {expires : 600}, function (err, val){});
+  mc.set("loses", "0", {expires : 600}, function (err, val){});*/
 
   res.json({
     dashes : dashes
@@ -59,7 +76,7 @@ router.get('/guessedResponse', (req, res) => {
   var c = c.toLowerCase();
 
   //Add code for repeated chars
-  mc.get("wins", function (err, val){
+/*  mc.get("wins", function (err, val){
     var wins = parseInt(val);
     mc.get("loses", function (err, val){
       var loses = parseInt(val);
@@ -67,15 +84,34 @@ router.get('/guessedResponse', (req, res) => {
         var missingSlots = val;
         mc.get("incorrectGuesses", function (err, val){ //Returns Buffer
           var incorrectGuesses = parseInt(val);
-          console.log("incorrectGuesses: " + incorrectGuesses);
+          console.log("incorrectGuesses: " + incorrectGuesses);*/
+          if(req.session.wins){
+            wins = req.session.wins;
+          }
+          if(req.session.loses){
+            loses = req.session.loses;
+          }
+          if(req.session.missingSlots){
+            missingSlots = req.session.missingSlots;
+          }
+          if(req.session.incorrectGuesses){
+            incorrectGuesses = req.session.incorrectGuesses;
+          }
+          if(req.session.dashes){
+            dashes = req.session.dashes;
+          }
+          if(req.session.current_word){
+            current_word = req.session.current_word;
+            console.log(current_word);
+          }
 
-          mc.get("dashes", function (err, val){
+        /*  mc.get("dashes", function (err, val){
             var dashes = val.toString().split(',');
 
             mc.get("current_word", function (err, val){
               var current_word = val.toString();
               console.log(current_word);
-
+*/
               for(var i=0; i<current_word.length; i++){
                 if (c == current_word[i]){
                   guess = true;
@@ -105,12 +141,12 @@ router.get('/guessedResponse', (req, res) => {
                   loses++;
                 }
               }
-              mc.set("wins", wins.toString(), {expires : 600}, function (err, val){
+              /*mc.set("wins", wins.toString(), {expires : 600}, function (err, val){
                 mc.set("loses", loses.toString(), {expires : 600}, function (err, val){
                   mc.set("dashes", dashes.toString(), {expires : 600}, function (err, val){
                     mc.set("missingSlots", missingSlots.toString(), {expires : 600}, function (err, val){
                       mc.set("incorrectGuesses", incorrectGuesses.toString(), {expires : 600}, function (err, val){
-
+*/
                         res.json({
                           guess : guess,
                           dashes : dashes,
@@ -121,7 +157,7 @@ router.get('/guessedResponse', (req, res) => {
                           wins : wins
                         });
 
-                      });
+                /*      });
                     });
                   });
                 });
@@ -131,7 +167,7 @@ router.get('/guessedResponse', (req, res) => {
         });
       });
     });
-  });
+  });*/
 
 })
 

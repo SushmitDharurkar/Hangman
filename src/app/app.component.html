@@ -31,6 +31,8 @@
     </md-form-field>
   </form>
 
+  <p *ngIf = "alreadyGuessed">This character has been guessed before!
+
   <p *ngIf = "!guess">{{incorrectGuessMsg}}
 
   <!-- Find a condition here -->

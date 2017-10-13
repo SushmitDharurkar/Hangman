@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">You lost!!!\n\n<p *ngIf = \"wonGame\">You won!!!\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"wins || loses\">Wins: {{wins}}\n  <p *ngIf = \"loses || wins\">Loses: {{loses}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">You lost!!!\n\n<p *ngIf = \"wonGame\">You won!!!\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"alreadyGuessed\">This character has been guessed before!\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"wins || loses\">Wins: {{wins}}\n  <p *ngIf = \"loses || wins\">Loses: {{loses}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
 
 /***/ }),
 
@@ -61,17 +61,18 @@ var AppComponent = (function () {
         var _this = this;
         this.http = http;
         this.title = 'Hangman';
-        http.get('/api/word')
+        http.get('/word')
             .subscribe(function (response) {
             _this.response = response;
             _this.dashes = _this.response.dashes;
             _this.guess = true;
-            _this.wins = 0;
-            _this.loses = 0;
+            _this.wins = _this.response.wins;
+            _this.loses = _this.response.loses;
             _this.endGame = false;
             _this.wonGame = false;
             _this.img_src = "../../assets/Images/hangman_0.jpg";
             _this.incorrectGuessesList = [];
+            _this.guessesList = [];
         }, function (err) {
             console.log('Error occurred in first response' + err);
         });
@@ -79,15 +80,25 @@ var AppComponent = (function () {
     AppComponent.prototype.onSubmit = function () {
         var _this = this;
         this.guess = true;
-        var params = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]();
-        params = params.append('letter', this.letter);
-        this.http.get('/api/guessedResponse', { params: params })
-            .subscribe(function (response) {
-            _this.guessedResponse = response;
-            _this.displayOutput();
-        }, function (err) {
-            console.log('Error occurred in guessedResponse response' + err);
-        });
+        this.alreadyGuessed = false;
+        for (var i = 0; i < this.guessesList.length; i++) {
+            if (this.guessesList[i] == this.letter) {
+                this.alreadyGuessed = true;
+                break;
+            }
+        }
+        if (!this.alreadyGuessed) {
+            var params = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]();
+            params = params.append('letter', this.letter);
+            this.http.get('/guessedResponse', { params: params })
+                .subscribe(function (response) {
+                _this.guessedResponse = response;
+                _this.displayOutput();
+            }, function (err) {
+                console.log('Error occurred in guessedResponse response' + err);
+            });
+            this.guessesList.push(this.letter);
+        }
     };
     AppComponent.prototype.displayOutput = function () {
         if (this.guessedResponse.guess) {
@@ -121,7 +132,7 @@ var AppComponent = (function () {
     AppComponent.prototype.playAgain = function () {
         var _this = this;
         this.dashes = [];
-        this.http.get('/api/playAgain')
+        this.http.get('/word')
             .subscribe(function (response) {
             _this.response = response;
             _this.dashes = _this.response.dashes;
@@ -130,6 +141,7 @@ var AppComponent = (function () {
             _this.wonGame = false;
             _this.img_src = "../../assets/Images/hangman_0.jpg";
             _this.incorrectGuessesList = [];
+            _this.guessesList = [];
             _this.incorrectGuessesCount = 0;
             _this.incorrectGuessesCountMsg = "";
             _this.wins = _this.response.wins;
