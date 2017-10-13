@@ -21,7 +21,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".dashes {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n\n.space {\n  padding-left: 5px;\n  padding-right: 5px;\n}\n", ""]);
+exports.push([module.i, ".dashes {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n\n.space {\n  padding-left: 5px;\n  padding-right: 5px;\n}\n\n.comments{\n  font-family:Courier;\n  color: #795548;\n  font-size: 20px;\n}\n\n.incorrect{\n  font-family:Courier;\n  color: #E53935;\n  font-size: 20px;\n}\n\n.image{\n  border: solid;\n}\n", ""]);
 
 // exports
 
@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<!--<p>{{incorrectGuessesCountMsg}}-->\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">The word was: {{current_word}}\n\n<p *ngIf = \"endGame\">You lost!!!\n\n<p *ngIf = \"wonGame\">You won!!!\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p *ngIf = \"alreadyGuessed\">This character has been guessed before!\n\n  <p *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <!-- Find a condition here -->\n  <p *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p *ngIf = \"wins || loses\">Wins: {{wins}}\n  <p *ngIf = \"loses || wins\">Loses: {{loses}}\n  <!-- <div class = \"dashes\">\n    <p class=\"space\" *ngFor = \"let guessedChar of incorrectGuessesList\">{{guessedChar}}\n  </div>-->\n\n<!--\n  <ul>\n    <li *ngFor = \"let guessedChar of incorrectGuessesList\"> {{guessedChar}} </li>\n  </ul>\n-->\n\n</div>\n"
+module.exports = "<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{title}}!\n  </h1>\n\n  <img class=\"image\" width=\"300\" src = {{img_src}} />\n</div>\n\n<div class = \"dashes\">\n  <p class=\"space\" *ngFor = \"let d of dashes\">{{ d }}\n</div>\n\n<div style=\"text-align:center\">\n\n<p *ngIf = \"endGame\">The word was: {{current_word}}\n\n<p *ngIf = \"endGame\">You lost!!!\n\n<p *ngIf = \"wonGame\">You won!!!\n\n<p> <button *ngIf = \"endGame || wonGame\"\n    md-button (click) = \"playAgain()\">Play Again</button>\n</div>\n\n<div style=\"text-align:center\">\n  <form #thisform = \"ngForm\">\n    <md-form-field>\n      <input size = \"2\" [(ngModel)]=\"letter\" name=\"letter\" maxlength=\"1\">\n      <button md-button (click) = \"onSubmit()\">Submit</button>\n    </md-form-field>\n  </form>\n\n  <p class= \"comments\" *ngIf = \"alreadyGuessed\">This character has been guessed before!\n\n  <p class= \"comments\" *ngIf = \"!guess\">{{incorrectGuessMsg}}\n\n  <p class= \"incorrect\" *ngIf = \"!guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p class= \"incorrect\" *ngIf = \"guess\">Incorrect Guesses: {{incorrectGuessesList}}\n\n  <p class= \"comments\" *ngIf = \"wins || loses\">Wins: {{wins}}\n  <p class= \"comments\" *ngIf = \"loses || wins\">Loses: {{loses}}\n\n\n</div>\n\n<div (window:beforeunload)=\"closeSession()\"></div>\n"
 
 /***/ }),
 
@@ -84,6 +84,7 @@ var AppComponent = (function () {
         for (var i = 0; i < this.guessesList.length; i++) {
             if (this.guessesList[i] == this.letter) {
                 this.alreadyGuessed = true;
+                this.letter = "";
                 break;
             }
         }
@@ -149,13 +150,23 @@ var AppComponent = (function () {
             _this.loses = _this.response.loses;
         }, function (err) { return console.log('Error occurred in first response' + err); });
     };
+    AppComponent.prototype.closeSession = function () {
+        var _this = this;
+        this.http.get('/close')
+            .subscribe(function (response) {
+            _this.response = response;
+            if (_this.response.success) {
+                console.log("Session closed succesfully.");
+            }
+        }, function (err) { return console.log('Error occurred in first response' + err); });
+    };
     return AppComponent;
 }());
 AppComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'app-root',
         template: __webpack_require__("../../../../../src/app/app.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/app.component.css")]
+        styles: [__webpack_require__("../../../../../src/app/app.component.css")],
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object])
 ], AppComponent);

@@ -8,3 +8,19 @@
   padding-left: 5px;
   padding-right: 5px;
 }
+
+.comments{
+  font-family:Courier;
+  color: #795548;
+  font-size: 20px;
+}
+
+.incorrect{
+  font-family:Courier;
+  color: #E53935;
+  font-size: 20px;
+}
+
+.image{
+  border: solid;
+}

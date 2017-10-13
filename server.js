@@ -31,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/word', (req, res) => {
   console.log("server was called");
-
   var current_word = randomWord();
   current_word = current_word.toLowerCase();
   // console.log(current_word);
@@ -90,7 +89,7 @@ app.get('/guessedResponse', (req, res) => {
   dashes = req.session.dashes;
   current_word = req.session.current_word;
 
-  console.log(incorrectGuesses);
+  // console.log(incorrectGuesses);
   for(var i=0; i<current_word.length; i++){
     if (c == current_word[i]){
       guess = true;
@@ -147,6 +146,20 @@ app.get('/guessedResponse', (req, res) => {
       current_word : current_word
     });
   }
+})
+
+app.get('/close', (req, res) => {
+  console.log("Clossing Session.");
+  req.session.destroy(function(err) {
+    if (err){
+      console.log("Session not closed.");
+    }
+    else {
+      res.json({
+        success: true
+      });
+    }
+  });
 })
 
 // Send all other requests to the Angular app

@@ -6,7 +6,8 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
+  //  host : {'window:onbeforeunload':'doSomething'}
 })
 export class AppComponent {
     title = 'Hangman';
@@ -55,6 +56,7 @@ export class AppComponent {
         for (var i =0 ; i< this.guessesList.length; i++){
           if (this.guessesList[i] == this.letter){
             this.alreadyGuessed = true;
+            this.letter = "";
             break;
           }
         }
@@ -129,5 +131,18 @@ export class AppComponent {
                 },
                 (err) => console.log('Error occurred in first response' + err),
             );
+    }
+
+    closeSession() {
+      this.http.get('/close')
+          .subscribe(
+              (response) => {
+                this.response = response;
+                if(this.response.success){
+                    console.log("Session closed succesfully.");
+                }
+              },
+              (err) => console.log('Error occurred in first response' + err),
+          );
     }
 }

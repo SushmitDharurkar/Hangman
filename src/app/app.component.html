@@ -1,17 +1,14 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
     Welcome to {{title}}!
   </h1>
 
-  <img width="300" src = {{img_src}} />
+  <img class="image" width="300" src = {{img_src}} />
 </div>
 
 <div class = "dashes">
   <p class="space" *ngFor = "let d of dashes">{{ d }}
 </div>
-
-<!--<p>{{incorrectGuessesCountMsg}}-->
 
 <div style="text-align:center">
 
@@ -33,25 +30,18 @@
     </md-form-field>
   </form>
 
-  <p *ngIf = "alreadyGuessed">This character has been guessed before!
+  <p class= "comments" *ngIf = "alreadyGuessed">This character has been guessed before!
 
-  <p *ngIf = "!guess">{{incorrectGuessMsg}}
+  <p class= "comments" *ngIf = "!guess">{{incorrectGuessMsg}}
 
-  <!-- Find a condition here -->
-  <p *ngIf = "!guess">Incorrect Guesses: {{incorrectGuessesList}}
+  <p class= "incorrect" *ngIf = "!guess">Incorrect Guesses: {{incorrectGuessesList}}
 
-  <p *ngIf = "guess">Incorrect Guesses: {{incorrectGuessesList}}
+  <p class= "incorrect" *ngIf = "guess">Incorrect Guesses: {{incorrectGuessesList}}
 
-  <p *ngIf = "wins || loses">Wins: {{wins}}
-  <p *ngIf = "loses || wins">Loses: {{loses}}
-  <!-- <div class = "dashes">
-    <p class="space" *ngFor = "let guessedChar of incorrectGuessesList">{{guessedChar}}
-  </div>-->
+  <p class= "comments" *ngIf = "wins || loses">Wins: {{wins}}
+  <p class= "comments" *ngIf = "loses || wins">Loses: {{loses}}
 
-<!--
-  <ul>
-    <li *ngFor = "let guessedChar of incorrectGuessesList"> {{guessedChar}} </li>
-  </ul>
--->
 
 </div>
+
+<div (window:beforeunload)="closeSession()"></div>
