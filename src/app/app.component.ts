@@ -54,7 +54,7 @@ export class AppComponent {
         this.guess = true;
         this.alreadyGuessed = false;
         for (var i =0 ; i< this.guessesList.length; i++){
-          if (this.guessesList[i] == this.letter){
+          if (this.guessesList[i] == this.letter.toLowerCase()){
             this.alreadyGuessed = true;
             this.letter = "";
             break;
@@ -75,7 +75,7 @@ export class AppComponent {
                      console.log('Error occurred in guessedResponse response' + err);
                    }
               );
-          this.guessesList.push(this.letter);
+          this.guessesList.push(this.letter.toLowerCase());
         }
     }
 
