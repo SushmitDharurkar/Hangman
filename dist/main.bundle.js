@@ -121,7 +121,7 @@ var AppComponent = (function () {
     AppComponent.prototype.playAgain = function () {
         var _this = this;
         this.dashes = [];
-        this.http.get('/api/word')
+        this.http.get('/api/playAgain')
             .subscribe(function (response) {
             _this.response = response;
             _this.dashes = _this.response.dashes;

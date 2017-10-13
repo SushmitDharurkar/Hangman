@@ -95,7 +95,7 @@ export class AppComponent {
 
     playAgain() {
         this.dashes = [];
-        this.http.get('/api/word')
+        this.http.get('/api/playAgain')
             .subscribe(
                 (response) => {
                   this.response = response;
